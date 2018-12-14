@@ -1,0 +1,15 @@
+{
+  "name": "projeto-sonda-marte",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gerdon Mafra",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "restify": "^7.3.0"
+  }
+}
