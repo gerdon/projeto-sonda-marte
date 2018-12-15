@@ -16,8 +16,9 @@ router.get('/posicaoInicial', (req, res) => {
  * caso o movimento seja válido ou erro caso o movimento seja inválido
  */
 router.post('/movimentacao', (req, res) => {
+
     sonda.movimentarSonda(req.body);
-    res.send("Movimentação");
+    res.send("Movimentação realizada");
 });
 
 /**

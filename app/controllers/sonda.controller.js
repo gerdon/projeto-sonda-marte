@@ -4,8 +4,10 @@ const area = [
     ['0,2', '1,2', '2,2', '3,2', '4,2'],
     ['0,1', '1,1', '2,1', '3,1', '4,1'],
     ['0,0', '1,0', '2,0', '3,0', '4,0']
-];
-let posicaoSonda;
+].reverse();
+let posicaoSonda = area[0][0];
+let operacao = +1;
+let direcao = 'D';
 
 /**
  * A sonda inicia no quadrante (x = 0, y = 0), 
@@ -13,27 +15,7 @@ let posicaoSonda;
  * também inicia com a face para a direita.
  */
 function posicaoInicial() {
-    area.reverse();
-    for(let i = 0; i < 5; i++) {
-        for(let y = 0; y < 5; y++) { //Inverter a coluna para corresponder ao exemplo
-            console.log(area[i][y]);
-        }
-    }
     posicaoSonda = area[0][0];
-    console.log("Posição inicial da sonda: " + posicaoSonda);
-
-    for(let i = 0; i < area.length; i++) {
-        // let index = area[i].findIndex(e => e == '0,0');
-        let index = area[i].findIndex(elemento => elemento == posicaoSonda);
-        if(index != -1) {
-            console.log(area[i][index]);
-            if(typeof area[i][index - 1] === "undefined"){
-                console.log("Erro");
-            }
-            // posicaoSonda = area[i][index - 1];
-            // console.log(posicaoSonda);
-        }
-    }
 }
 
 /**
@@ -49,26 +31,67 @@ function posicaoInicial() {
  * @param {*} movimentacao 
  */
 function movimentarSonda(movimentacao) {
-    let movimentos = null;
-    for(let i = 0; i < movimentacao.length; i++) {
-        switch (movimentacao[i]) {
+    let movimentos = movimentacao.movimentacao;
+    let posicao;
+
+    for(let i = 0; i < movimentos.length; i++) {
+        switch (movimentos[i]) {
             case 'GE':
-                for(let i = 0; i < area.length; i++) {
-                    let index = area[i].findIndex(e => e == '0,0');
-                    if(index != -1) {
-                        if(area[i][index - 1] == "undefined"){
-                            console.log("Erro");
-                        }
+                girarEsquerda();
+                // if(direcao == 'E') {
+                //     operacao = -1;
+                //     direcao = 'B';
+                // } else if(direcao == 'B') {
+                //     operacao = +1;
+                //     direcao = 'D';
+                // } else if(direcao == 'D') {
+                //     operacao = +1;
+                //     direcao = 'C';
+                // } else {
+                //     operacao = -1;
+                //     direcao = 'E';
+                // }
+                break;
+            case 'GD':
+                girarDireita();
+                // if(direcao == 'E') {
+                //     operacao = +1;
+                //     direcao = 'C';
+                // } else if(direcao == 'B') {
+                //     operacao = -1;
+                //     direcao = 'E';
+                // } else if(direcao == 'D') {
+                //     operacao = -1;
+                //     direcao = 'B';
+                // } else {
+                //     operacao = +1;
+                //     direcao = 'D';
+                // }
+                break;
+            case 'M':
+                posicao = getIndiceMatriz(posicaoSonda);
+
+                let moveBC = area[posicao[0] + operacao][posicao[1]];
+                let moveED = area[posicao[0]][posicao[1] + operacao];
+
+                if(direcao == 'B' || direcao == 'C'){
+                    // Verifica se o movimento é válido
+                    if(typeof moveBC == "undefined"){
+                        console.log("Erro: Um movimento inválido foi detectado");
+                    } else {
+                        posicaoSonda = moveBC;
+                        console.log("Moveu para: " + posicaoSonda);
+                    }
+                } else {
+                    // Verifica se o movimento é válido
+                    if(typeof moveED == "undefined"){
+                        console.log("Erro: Um movimento inválido foi detectado");
+                    } else {
+                        posicaoSonda = moveED;
+                        console.log("Moveu para: " + posicaoSonda);
                     }
                 }
                 break;
-            case 'GD':
-                console.log(posicaoSonda);
-                break;
-            case 'M':
-                console.log(posicaoSonda);
-                break;
-        
             default:
                 break;
         }
@@ -79,14 +102,65 @@ function getPosicaoAtual() {;
     return posicaoSonda;
 }
 
-function getIndiceMatriz() {
+function getIndiceMatriz(posicao) {
+    let linha, coluna = -1;
+    let index;
+
+    // Percorre o Array Bidimensional em busca do indíce do elemento
     for(let i = 0; i < area.length; i++) {
-        let index = area[i].findIndex(elemento => elemento == posicaoSonda);
+        index = area[i].findIndex(elemento => elemento == posicao);
         if(index != -1) {
-            if(area[i][index - 1] == "undefined"){
-                console.log("Erro");
-            }
+            linha = i;
+            coluna = index;
         }
+    }
+
+    return [linha, coluna];
+}
+
+function girarEsquerda() {
+    switch (direcao) {
+        case 'E':
+            operacao = -1;
+            direcao = 'B';    
+            break;
+        case 'B':
+            operacao = +1;
+            direcao = 'D';
+            break;
+        case 'D':
+            operacao = +1;
+            direcao = 'C';    
+            break;
+        case 'C':
+            operacao = -1;
+            direcao = 'E';    
+            break;
+        default:
+            break;
+    }
+}
+
+function girarDireita() {
+    switch (direcao) {
+        case 'E':
+            operacao = +1;
+            direcao = 'C';    
+            break;
+        case 'B':
+            operacao = -1;
+            direcao = 'E';
+            break;
+        case 'D':
+            operacao = -1;
+            direcao = 'B';
+            break;
+        case 'C':
+            operacao = +1;
+            direcao = 'D';
+            break;
+        default:
+            break;
     }
 }
 
