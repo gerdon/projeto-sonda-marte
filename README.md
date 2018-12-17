@@ -41,11 +41,19 @@ Executando `/posicaoAtual` obtém como retorno a posição da Sonda no quadrante
 
 Executando `/posicaoInicial` retorna a Sonda para a posição x = 0, y = 0 do quadrante. Não há retorno, apenas uma mensagem.
 
-Executando `/movimentacao` obtemos a posição da Sonda caso `Sucesso`,
+Executando `/movimentacao` o comando:
 
 ```
 {
-    "[x][y]": "0,0",
+  movimentos: ['GE', 'M', 'M', 'M', 'GD', 'M', 'M']
+}
+```
+
+ obtemos a posição da Sonda caso `Sucesso`,
+
+```
+{
+    "[x][y]": "2,3",
 }
 ```
 
